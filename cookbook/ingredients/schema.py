@@ -2,7 +2,7 @@ import graphene
 
 from graphene_django.types import DjangoObjectType
 
-from cookbook.ingredients.models import (
+from ingredients.models import (
     Category,
     Ingredient
 )

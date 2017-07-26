@@ -1,9 +1,9 @@
 import graphene 
 
-import cookbook.ingredients.schema
+import ingredients.schema
 
 
-class Query(cookbook.ingredients.schema.Query, graphene.ObjectType):
+class Query(ingredients.schema.Query, graphene.ObjectType):
     pass
 
 
