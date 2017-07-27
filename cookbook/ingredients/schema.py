@@ -73,3 +73,43 @@ class Query(graphene.AbstractType):
 
     def resolve_all_ingredients(self, args, context, info):
         return Ingredient.objects.select_related('category').all()
+
+
+class CreateCategory(graphene.Mutation):
+    class Input: 
+        name = graphene.String()
+
+    category = graphene.Field(lambda: CategoryType)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        name = args.get('name')
+        category = Category.objects.create(name=name)
+        
+        return CreateCategory(category=category)
+
+
+class CreateIngredient(graphene.Mutation):
+    class Input:
+        name = graphene.String()
+        notes = graphene.String()
+        category_name = graphene.String()
+
+    ingredient = graphene.Field(lambda: IngredientType)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        name = args.get('name')
+        notes = args.get('notes')
+        category_name = args.get('category_name')
+
+        category = Category.objects.get(name=category_name)
+        print('category of {} is {}'.format(name, category))
+        ingredient = Ingredient.objects.create(name=name, notes=notes, category=category)
+
+        return CreateIngredient(ingredient=ingredient)
+
+
+class Mutation(graphene.AbstractType):
+    create_category = CreateCategory.Field()
+    create_ingredient = CreateIngredient.Field()
